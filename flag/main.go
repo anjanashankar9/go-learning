@@ -9,7 +9,7 @@ import (
 var help = flag.Bool("help", false, "Show help")
 var boolFlag = false
 var stringFlag = "Hello There!"
-var intFlag = 5
+var intFlag int
 
 func main() {
 	flag.BoolVar(&boolFlag, "boolFlag", false, "A boolean flag")
