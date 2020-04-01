@@ -6,19 +6,18 @@ import (
 	"os"
 )
 
-var help = false
+var help = flag.Bool("help", false, "Show help")
 var boolFlag = false
 var stringFlag = "Hello There!"
 var intFlag = 5
 
 func main() {
-	flag.BoolVar(&help, "help", false, "Show help")
 	flag.BoolVar(&boolFlag, "boolFlag", false, "A boolean flag")
 	flag.StringVar(&stringFlag, "stringFlag", "Hello There!", "A string flag")
 	flag.IntVar(&intFlag, "intFlag", 4, "An integer flag")
 	flag.Parse()
 
-	if help {
+	if *help {
 		flag.Usage()
 		os.Exit(0)
 	}
