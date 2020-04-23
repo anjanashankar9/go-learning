@@ -54,8 +54,24 @@ func main() {
 	e := [2]int{1, 2}
 	f := [...]int{1, 2}
 	g := [2]int{1, 3}
-	fmt.Println(e == f, e == g, f == g) // "true false false"
+
 	// h := [3]int{1, 2}
 	// fmt.Println(e == h) // compile error: cannot compare [2]int == [3]int
+	fmt.Println(e == f, e == g, f == g) // "true false false"
 
+	// Go passes a copy of arrays to the functions.
+	// Any changes made to the array inside the function does not affect the original copy.
+
+	// We can explicitly pass a pointer to array.
+	zero(&e)
+}
+
+/*
+Using a pointer to an array is effcient and allows the called function to mutate the caller's variable,
+but arrays are inflexible because of their fixed size.
+*/
+func zero(ptr *[2]int) {
+	for i := range ptr {
+		ptr[i] = 0
+	}
 }
