@@ -15,6 +15,9 @@ However, the keys and values could be of different types.
 
 The key type must be comparable using ==
 */
+
+var m = make(map[string]int)
+
 func main() {
 	ages1 := make(map[string]int) //mapping from strings to int
 	ages1["alice"] = 26
@@ -82,7 +85,41 @@ func main() {
 	// Maps cannot be compared to each other
 	// The only legal comparison is with nil
 	fmt.Println(equal(ages1, ages2))
+
+	/*
+		Sometimes we need map whose keys are slices but
+		because a map's keys must be comparable, this cannot be
+		expressed directly. It can be done in 2 steps
+		First, a helper function k that maps each key to a string
+		with a property that k(x) == k(y) if and only if we consider
+		x and y equivalent.
+		Then we create a map whose keys are strings, applying the helper
+		function to each key before we access the map
+	*/
+
+	// The example below uses a map to record the number of times
+	// Add has been called with a given list of strings.
+	Add([]string{"a", "b", "c"})
+	Count([]string{"a", "b", "c"})
+	fmt.Println(m)
+
+	// The value of map can itself be a composite type, such as map ir slice.
 	fmt.Println("End of Main")
+}
+
+// The function below uses fmt.Sprintf to convert a slice of
+// strings into a single string that is a suitable map key
+// quoting each slice element with %q to record string boundaries
+func k(list []string) string {
+	return fmt.Sprintf("%q", list)
+}
+
+func Add(list []string) {
+	m[k(list)]++
+}
+
+func Count(list []string) int {
+	return m[k(list)]
 }
 
 /*
