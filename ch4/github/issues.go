@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func main() {
+func githubMain() {
 	result, err := SearchIssues(os.Args[1:])
 	if err != nil {
 		log.Fatal(err)
