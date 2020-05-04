@@ -113,6 +113,9 @@ func main() {
 	}
 	// The html/template package automatically HTML-escaped the titles so that
 	// they appear literally.
+	// We can suppres this auto escaping behavior for fields that contain
+	// trusted HTML data by using the named string type template.HTML instead
+	// of string.
 
 	fmt.Print("End of Main")
 }
