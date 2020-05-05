@@ -178,6 +178,77 @@ defined as follows:
 			//Finished reading the file
 		}
 */
-func main() {
 
+/*
+Functions are first class values in Go. that is, like other values, function
+values have types, and they may be assigned to variables or passed to or
+returned from functions.
+*/
+func square(n int) int     { return n * n }
+func negative(n int) int   { return -n }
+func product(m, n int) int { return m * n }
+
+func main() {
+	f := square
+	fmt.Println(f(3))
+
+	f = negative
+	fmt.Println(f(3))
+
+	// The following is a compile error: can't assign f(int, int) int to f(int) int
+	//f = product
+	g := product
+	fmt.Println(g(2, 3))
+
+	// The zero value of a function type is nil. Calling a nil value function
+	// causes a panic.
+	var f1 func(int) int
+	//f1(3) //would result in panic: call of nil function
+	f1 = square
+	fmt.Println(f1(3))
+
+	// Function values may be compared to nil.
+	// But they are not comparable so they may not be compared against each
+	// other or used as keys in the map.
+
+	/*
+		Anonymous function
+		Named functions can be declared only at the package level, but we can use
+		a function literal to denote a function valiue without any expression.
+		A function literal is written like a function declaration, but without a name
+		following the func keyword. It is an expression and its value is called anonymous functions.
+	*/
+	s := sqaures()
+	fmt.Println(s()) // 1
+	fmt.Println(s()) // 4
+	fmt.Println(s()) // 9
+	fmt.Println(s()) // 16
+	s1 := sqaures()
+	fmt.Println(s1())
+	/*
+		A call to squares creates a local variable x and returns an
+		anonymous function that, each time it is called, increments x
+		and returns its square.
+		A second call to squares would create a second variable x and
+		return a new anonymous function.
+		This demonstrates that function values are not just code but can
+		maintain a state.
+		The anonymous inner function can access and update the local variables
+		of the enclosing function squares. These hidden variable references are
+		why we classify functions as reference types and why function values
+		are not comparable.
+		Function values like these are implemented using a technique called CLOSURES.
+	*/
+}
+
+// For demonstrating anonymous functions.
+func sqaures() func() int {
+	// squares returns a function that returns
+	// the next square number each time it is called.
+	var x int
+
+	return func() int {
+		x++
+		return x * x
+	}
 }
