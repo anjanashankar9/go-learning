@@ -239,6 +239,31 @@ func main() {
 		are not comparable.
 		Function values like these are implemented using a technique called CLOSURES.
 	*/
+
+	/*
+		A variadic function is one that can be called with varying number of arguments. Most familiar example is fmt.Printf
+		To declare a variadic function, the type of the final parameter is
+		preceded by an ellipsis, " ... " which indicates that the function may
+		be called with any number of arguments of this type.
+	*/
+	fmt.Println()
+	fmt.Println(sum())           //  "0"
+	fmt.Println(sum(3))          //  "3"
+	fmt.Println(sum(1, 2, 3, 4)) //  "10"
+	/*
+		Implicitly the caller allocates an array, copies the arguments into it,
+		and passes a slice of the entire array to the function.
+	*/
+	// You can invoke a variadic function even when the arguments are already
+	// in a slice.
+	values := []int{1, 2, 3, 4}
+	fmt.Println(sum(values...)) // "10"
+	/*
+		Although the ...int parameter behaves like a slice within the function
+		body, the type of a variadic function is distinct from the type of a
+		function with an ordinary slice parameter.
+	*/
+
 }
 
 // For demonstrating anonymous functions.
@@ -251,4 +276,12 @@ func sqaures() func() int {
 		x++
 		return x * x
 	}
+}
+
+func sum(vals ...int) int {
+	total := 0
+	for _, val := range vals {
+		total += val
+	}
+	return total
 }
