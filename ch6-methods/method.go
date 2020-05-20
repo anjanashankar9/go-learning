@@ -54,8 +54,9 @@ func main() {
 	var a IntList
 
 	fmt.Println(a.Sum())
-
 	useColoredPoint()
+	methodValue()
+	methodExpression()
 }
 
 /*
@@ -256,4 +257,93 @@ func useColoredPoint() {
 		With embedding it's possible and sometimes useful for unnamed
 		struct types to have methods too.
 	*/
+
+}
+
+func methodValue() {
+	/*
+		Usually we select and call a method in the same expression,
+		e.g- p.Distance(), but it is possible to separate these two
+		though not recommended.
+
+		The selector p.Distance yields a method value, a function that
+		binds a method (Point.Distance) to a specific receiver value p.
+		This function can then be invoked without a receiver value, it
+		needs only the non-receiver arguments.
+	*/
+	p := Point{1, 2}
+	q := Point{4, 6}
+
+	distanceFromP := p.Distance
+	fmt.Println(distanceFromP(q)) // 5
+
+	/*
+		Method values are useful when a package's API calls for a function
+		value, and the client's desired behavior for that function to call
+		a method on a specific receiver.
+
+		For example, the function time.AfterFunc calls a function value after
+		a specified delay.
+		type Rocket struct { ... }
+		func (r *Rocket) Launch() {}
+		r := new(Rocket)
+		time.AfterFunc(10 * time.Second, func() { r.Launch() })
+
+		The method value syntax is shorter.
+		time.AfterFunc(10 * time.Second, r.Launch)
+	*/
+
+}
+
+func methodExpression() {
+	/*
+		Related to method value is the method Expression. When
+		calling a method, as opposed to an ordinary function, we must supply
+		the receiver in a special way using the selector syntax.
+		A method expression, written T.f or (*T).f where T is a type,
+		yields a function value with a regular first parameter taking the place
+		of the receiver, so it can be called in the usual way.
+	*/
+	p := Point{1, 2}
+	q := Point{4, 6}
+
+	distance := Point.Distance   //method expression
+	fmt.Println(distance(p, q))  //5
+	fmt.Printf("%T\n", distance) //func(main.Point, main.Point) float64
+
+	/*
+		Method expressions can be useful when you need a value to represent a
+		choice among several methods belonging to the same type so that you can
+		call the chosen method with many different receivers.
+
+		In the following example, the variable op represents either the addition
+		or the subtraction method of type Point, and Path.TranslateBy calls it
+		for each Point in the Path.
+	*/
+
+}
+
+func (p Point) Add(q Point) Point {
+	return Point{p.X + q.X, p.Y + q.Y}
+}
+
+func (p Point) Sub(q Point) Point {
+	return Point{p.X - q.X, p.Y - q.Y}
+}
+
+type PathME []Point
+
+func (path Path) TranslateBy(offset Point, add bool) {
+	var op func(p, q Point) Point
+
+	if add {
+		op = Point.Add
+	} else {
+		op = Point.Sub
+	}
+
+	for i := range path {
+		// Call either path[i].Add(offset) or path[i].Sub(offset).
+		path[i] = op(path[i], offset)
+	}
 }
