@@ -21,3 +21,17 @@ func mustCopy(dst io.Writer, src io.Reader) {
 		log.Fatal(err)
 	}
 }
+
+/*
+The program reads data from the connection and writes it to
+the standard output until an end of file condition or an
+error occurs.
+
+Running two instances shows that the second client must wait
+until the first client is finished because the server is
+sequential, it deals with only one client at a time.
+
+Just one change is needed to make the server concurrent: adding the go
+keyword to the call to handleConn causes each call to run in
+its own goroutine.
+*/
