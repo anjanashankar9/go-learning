@@ -12,8 +12,10 @@ other case does. Example:
 		default:       // ...
 	}
 
-As with an ordinary switch statement, cases are considered in order, and when a match is found, the case's body is executed.
-Case order becomes significant when one or more case types are interfaces, since there is a possibility of two cases matching.
+As with an ordinary switch statement, cases are considered in order, and when a
+match is found, the case's body is executed.
+Case order becomes significant when one or more case types are interfaces,
+since there is a possibility of two cases matching.
 
 Sometimes, the logic for a case needs access to the value extracted by the type assertion.
 	switch x := x.(type) { ... }
